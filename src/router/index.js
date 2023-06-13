@@ -31,6 +31,7 @@ const routes = [
   {
     path: '/drawer',
     name: 'drawer',
+    meta: { requiresAuth: true },
     component: () => import('@/views/Drawer.vue')
   }
 ]
