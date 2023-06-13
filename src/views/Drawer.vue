@@ -87,8 +87,18 @@
               <h3 class="f14"><b>设置</b></h3>
               <h4 class="f14 mt20 mb10">模型</h4>
               <div>
-                <el-check-tag checked class="mr10 txt-c">通用</el-check-tag>
-                <el-check-tag class="mr10 txt-c">二次元</el-check-tag>
+                <el-check-tag
+                  :checked="drawerOptions.niji === 0"
+                  class="mr10 txt-c"
+                  @click.prevent.stop="drawerOptions.niji = 0"
+                  >通用</el-check-tag
+                >
+                <el-check-tag
+                  :checked="drawerOptions.niji === 5"
+                  class="mr10 txt-c"
+                  @click.prevent.stop="drawerOptions.niji = 5"
+                  >二次元</el-check-tag
+                >
               </div>
               <h4 class="f14 mt30 mb10">图片比例</h4>
               <div>
@@ -126,7 +136,12 @@
                 />
               </div>
               <div class="mt40 mb10">
-                <el-button type="primary" class="w100">确认</el-button>
+                <el-button
+                  type="primary"
+                  class="w100"
+                  @click.prevent.stop="drawerPopupVisible = false"
+                  >确认</el-button
+                >
               </div>
             </div>
             <template #reference>
@@ -204,7 +219,8 @@ const drawerOptions = reactive({
   aspect: '1:1',
   chaos: 0,
   stylize: 100,
-  quality: 1
+  quality: 1,
+  niji: 0
 })
 
 const inputPrompt = ref('')
