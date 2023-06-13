@@ -55,7 +55,8 @@ export const sendMessagesToAzureAi = async (messages) => {
         messages
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-from-swagger': 'swagger'
       }
     }
   )
@@ -77,7 +78,8 @@ export const sendMessagesToOpenAi = async (messages) => {
         messages
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-from-swagger': 'swagger'
       }
     }
   )
