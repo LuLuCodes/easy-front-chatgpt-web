@@ -103,7 +103,7 @@
       <div class="chat-body">
         <div class="flex all-c h50p pl24 pr24 bd-b1 space-b">
           <h4 class="f18">{{ curConversation && curConversation.title }}</h4>
-          <span class="icon icon-shezhi f18 pointer" @click="this.$router.push('/setting')"></span>
+          <SettingButton></SettingButton>
         </div>
         <div class="chat-content pt30 pb30">
           <el-scrollbar ref="messageScrollbarRef">
@@ -168,6 +168,7 @@ import {
 import LeftSideNav from '@/components/LeftSideNav.vue'
 import ConnectionEditDialog from '@/components/ConnectionEditDialog.vue'
 import Message from '@/components/Message.vue'
+import SettingButton from '@/components/SettingButton.vue'
 import SqlExecDrawer from '@/components/SqlExecDrawer.vue'
 
 import { storeToRefs } from 'pinia'

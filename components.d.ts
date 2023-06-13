@@ -42,6 +42,8 @@ declare module '@vue/runtime-core' {
     Message: typeof import('./src/components/Message.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingBar: typeof import('./src/components/SettingBar.vue')['default']
+    SettingButton: typeof import('./src/components/SettingButton.vue')['default']
     SqlExecDrawer: typeof import('./src/components/SqlExecDrawer.vue')['default']
   }
   export interface ComponentCustomProperties {
