@@ -9,7 +9,7 @@
           </div>
           <div class="pt24">
             <div class="chat-list-wrap">
-              <div class="flex all-t" @click="this.$router.go(-1)">
+              <div class="flex all-t" @click="router.go(-1)">
                 <span class="icon icon-shangyiye"></span>
                 <span class="flex-1 ml10">返回首页</span>
               </div>
@@ -64,10 +64,13 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 // import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingStore } from '@/store'
+
+const router = useRouter()
 
 const settingStore = useSettingStore()
 const { modelName } = storeToRefs(settingStore)
