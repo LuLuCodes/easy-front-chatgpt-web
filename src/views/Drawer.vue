@@ -326,7 +326,38 @@ const handlerActionImage = async ({ imageId, action }) => {
       action: action,
       image_id: imageId
     })
-    console.log(responseData)
+
+    const reader = responseData.getReader()
+    const decoder = new TextDecoder('utf-8')
+    let done = false
+    while (!done) {
+      const { value, done: readerDone } = await reader.read()
+
+      if (value) {
+        const data = decoder.decode(value)
+        const lines = data
+          .toString()
+          .split('\n')
+          .filter((line) => line.trim() !== '')
+        for (const line of lines) {
+          const parsed = safetyParseJson(line)
+          if (parsed) {
+            if (parsed.code) {
+              throw new Error(parsed.msg)
+            }
+            const { progress, ...others } = parsed
+            updateMessage(assistantMessage.id, {
+              content: `图片生成中，请耐心等待(${progress}%)...`,
+              imageData: others
+            })
+          }
+          nextTick(() => {
+            scrollToMessageListBottom()
+          })
+        }
+      }
+      done = readerDone
+    }
     updateMessage(assistantMessage.id, {
       status: 'DONE',
       content: `${imageId} ${action}`,
@@ -409,7 +440,7 @@ const handlerSubmit = async () => {
     let done = false
     while (!done) {
       const { value, done: readerDone } = await reader.read()
-
+      console.log(value)
       if (value) {
         const data = decoder.decode(value)
         const lines = data
