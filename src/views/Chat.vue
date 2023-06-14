@@ -174,11 +174,12 @@ const handlerSubmit = async () => {
   inputPromptRef.value.blur()
   promptSending.value = true
   let curConversationId = ''
+  const inputContent = inputPrompt.value.trim()
   if (!curConversation.value) {
-    curConversationId = createConversation(inputPrompt.value)
+    curConversationId = createConversation(inputContent)
   } else {
     curConversationId = curConversation.value.id
-    updateConversation(curConversation.value.id, { title: inputPrompt.value })
+    updateConversation(curConversation.value.id, { title: inputContent })
   }
 
   const userMessage = {
@@ -186,11 +187,11 @@ const handlerSubmit = async () => {
     conversationId: curConversationId,
     creatorRole: CreatorRole.User,
     createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    content: inputPrompt.value,
+    content: inputContent,
     status: MessageStatus.DONE
   }
 
-  let tokens = countTextTokens(inputPrompt.value)
+  let tokens = countTextTokens(inputContent)
 
   // let usageMessageList = []
   const formatedMessageList = []
@@ -217,7 +218,7 @@ const handlerSubmit = async () => {
   // Add the user prompt as the last context.
   formatedMessageList.push({
     role: CreatorRole.User,
-    content: inputPrompt.value
+    content: inputContent
   })
   inputPrompt.value = ''
   const assistantMessage = {
