@@ -95,8 +95,8 @@ const isSelectSql = computed(() => {
 watch(
   () => props.execSqlContent,
   async (newValue) => {
-    tableColumns.slice(0, tableColumns.length)
-    tableData.slice(0, tableColumns.length)
+    tableColumns.splice(0, tableColumns.length)
+    tableData.splice(0, tableData.length)
     showAlert.value = false
     if (newValue) {
       if (!isSelectSql.value) {
@@ -118,6 +118,8 @@ const hanlderExecSql = async () => {
       exec_sql: props.execSqlContent
     })
     if (isSelectSql.value) {
+      tableColumns.splice(0, tableColumns.length)
+      tableData.splice(0, tableData.length)
       tableData.push(...rawResults)
       tableColumns.push(
         ...Object.keys(head(tableData) || {}).map((key) => {
