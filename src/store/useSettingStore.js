@@ -5,6 +5,8 @@ export const useSettingStore = defineStore(
   'setting-store',
   () => {
     const modelName = ref('gpt-3.5-turbo')
+    const chatModelName = ref('gpt-3.5-turbo')
+    const sqlModelName = ref('gpt-3.5-turbo')
     const modelList = reactive([
       ({
         value: 'gpt-3.5-turbo',
@@ -15,7 +17,7 @@ export const useSettingStore = defineStore(
         label: 'gpt-4'
       })
     ])
-    return { modelName, modelList }
+    return { modelName, chatModelName, sqlModelName, modelList }
   },
   {
     persist: true

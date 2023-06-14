@@ -123,6 +123,33 @@
             :readonly="promptSending"
             @keyup.enter="handlerSubmit"
           />
+          <el-popover :visible="sqlPopupVisible" trigger="click" placement="top" :width="540">
+            <div class="pl10 pr10">
+              <h3 class="f14"><b>设置</b></h3>
+              <h4 class="f14 mt20 mb10">语言模型</h4>
+              <div>
+                <el-select placeholder="" v-model="sqlModelName">
+                  <el-option
+                    v-for="item in modelList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+              <div class="mt40 mb10">
+                <el-button type="primary" class="w100" @click.prevent.stop="sqlPopupVisible = false"
+                  >确认</el-button
+                >
+              </div>
+            </div>
+            <template #reference>
+              <span
+                @click="sqlPopupVisible = true"
+                class="icon icon-shezhi f18 ml10 mr10 pointer"
+              ></span>
+            </template>
+          </el-popover>
           <el-tooltip class="box-item" effect="dark" content="重新生成" placement="top">
             <span class="icon icon-shuaxin f18 ml10 mr10 pointer"></span>
           </el-tooltip>
@@ -161,7 +188,7 @@ import {
   countTextTokens,
   sqlBot,
   MessageStatus,
-  sendMessagesToAzureAi,
+  sendMessagesToOpenAi,
   safetyParseJson
 } from '@/utils'
 
@@ -172,7 +199,12 @@ import SettingButton from '@/components/SettingButton.vue'
 import SqlExecDrawer from '@/components/SqlExecDrawer.vue'
 
 import { storeToRefs } from 'pinia'
-import { useConnectionStore, useSqlConversationStore, useSqlMessageStore } from '@/store'
+import {
+  useConnectionStore,
+  useSqlConversationStore,
+  useSqlMessageStore,
+  useSettingStore
+} from '@/store'
 import { useCopyCode } from '@/hooks/useCopyCode'
 import { useExecCode } from '@/hooks/useExecCode'
 
@@ -188,6 +220,7 @@ const inputPromptRef = ref(null)
 const promptSending = ref(false)
 
 const messageScrollbarRef = ref(null)
+const sqlPopupVisible = ref(false)
 const editConnectionId = ref('')
 
 const tableLoading = ref(false)
@@ -207,6 +240,9 @@ const { conversationList, curConversationId, curConversation } = storeToRefs(con
 const messageStore = useSqlMessageStore()
 const { addMessage, updateMessage, delMessageByConversationId } = messageStore
 const { messageList } = storeToRefs(messageStore)
+
+const settingStore = useSettingStore()
+const { sqlModelName, modelList } = storeToRefs(settingStore)
 
 const conversationMessageList = computed(() => {
   return messageList.value.filter((message) => message.conversationId === curConversationId.value)
@@ -311,7 +347,7 @@ const handlerSubmit = async () => {
 
   if (selectedTableList.value.length === 0) {
     ElMessage({
-      message: '在库表较多情况下，未选择指定库表，可能导致响应内容不精确.',
+      message: '未指定库表，为节省token，将强制使用gpt3.5.',
       type: 'warning'
     })
   }
@@ -401,7 +437,10 @@ const handlerSubmit = async () => {
   })
 
   try {
-    const responseData = await sendMessagesToAzureAi({ messages: formatedMessageList })
+    const responseData = await sendMessagesToOpenAi({
+      modelName: selectedTableList.value.length > 0 ? sqlModelName.value : 'gpt-3.5-turbo',
+      messages: formatedMessageList
+    })
 
     const reader = responseData.getReader()
     const decoder = new TextDecoder('utf-8')

@@ -83,7 +83,7 @@
               <h3 class="f14"><b>设置</b></h3>
               <h4 class="f14 mt20 mb10">语言模型</h4>
               <div>
-                <el-select placeholder="" v-model="modelName">
+                <el-select placeholder="" v-model="chatModelName">
                   <el-option
                     v-for="item in modelList"
                     :key="item.value"
@@ -167,7 +167,7 @@ const { addMessage, updateMessage, delMessageByConversationId } = messageStore
 const { messageList } = storeToRefs(messageStore)
 
 const settingStore = useSettingStore()
-const { modelName, modelList } = storeToRefs(settingStore)
+const { chatModelName, modelList } = storeToRefs(settingStore)
 
 const conversationMessageList = computed(() => {
   return messageList.value.filter((message) => message.conversationId === curConversationId.value)
@@ -268,7 +268,7 @@ const handlerSubmit = async () => {
 
   try {
     const responseData = await sendMessagesToOpenAi({
-      modelName: modelName.value,
+      modelName: chatModelName.value,
       messages: formatedMessageList
     })
 
