@@ -1,5 +1,5 @@
 import { encode } from 'gpt-tokenizer'
-import api from '@/api'
+// import api from '@/api'
 
 export const MessageStatus = {
   LOADING: 'LOADING',
@@ -93,9 +93,24 @@ export const sendMessagesToOpenAi = async (messages) => {
 }
 
 export const sendMessagesToDrawer = async (params) => {
-  return await api.post({
-    data: params,
-    url: '/api/drawer/create-image',
-    timeout: 600000
-  })
+  const rawRes = await fetch(
+    `${import.meta.env.VITE_APP_BASE_API}/api/drawer/create-image-by-stream`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        ...params
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-from-swagger': 'swagger'
+      }
+    }
+  )
+
+  const data = rawRes.body
+  if (!data) {
+    throw new Error('no data')
+  }
+
+  return data
 }

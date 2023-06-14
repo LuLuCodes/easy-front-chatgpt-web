@@ -196,7 +196,13 @@ import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs'
 
-import { generateUUID, CreatorRole, MessageStatus, sendMessagesToDrawer } from '@/utils'
+import {
+  generateUUID,
+  CreatorRole,
+  MessageStatus,
+  sendMessagesToDrawer,
+  safetyParseJson
+} from '@/utils'
 import LeftSideNav from '@/components/LeftSideNav.vue'
 import Message from '@/components/Message.vue'
 import SettingButton from '@/components/SettingButton.vue'
@@ -396,11 +402,41 @@ const handlerSubmit = async () => {
       prompt: userMessage.content,
       ...drawerOptions
     })
-    console.log(responseData)
+
+    const reader = responseData.getReader()
+    const decoder = new TextDecoder('utf-8')
+    let done = false
+    while (!done) {
+      const { value, done: readerDone } = await reader.read()
+
+      if (value) {
+        const data = decoder.decode(value)
+        const lines = data
+          .toString()
+          .split('\n')
+          .filter((line) => line.trim() !== '')
+        for (const line of lines) {
+          const parsed = safetyParseJson(line)
+          if (parsed) {
+            if (parsed.code) {
+              throw new Error(parsed.msg)
+            }
+            const { progress, ...others } = parsed
+            updateMessage(assistantMessage.id, {
+              content: `图片生成中，请耐心等待(${progress}%)...`,
+              imageData: others
+            })
+          }
+          nextTick(() => {
+            scrollToMessageListBottom()
+          })
+        }
+      }
+      done = readerDone
+    }
     updateMessage(assistantMessage.id, {
       status: 'DONE',
-      content: userMessage.content,
-      imageData: responseData
+      content: userMessage.content
     })
   } catch (error) {
     updateMessage(assistantMessage.id, {

@@ -424,6 +424,9 @@ const handlerSubmit = async () => {
           }
           parsed = safetyParseJson(message)
           if (parsed) {
+            if (parsed.code) {
+              throw new Error(parsed.msg)
+            }
             const { delta, finish_reason } = parsed.choices[0]
             if (finish_reason === 'stop') {
               break

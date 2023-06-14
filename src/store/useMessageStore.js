@@ -151,11 +151,8 @@ export const useDrawerMessageStore = defineStore(
 
     function updateMessage(messageId, updatePayload) {
       const message = getMessageById(messageId)
-      console.log('message1: ', JSON.stringify(message))
-      console.log('updatePayload: ', JSON.stringify(updatePayload))
       if (message) {
         Object.assign(message, updatePayload)
-        console.log('message2: ', JSON.stringify(message))
         window.localStorage.setItem('drawer-message-list', JSON.stringify(messageList))
       }
     }
