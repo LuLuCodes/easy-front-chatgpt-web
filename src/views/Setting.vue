@@ -73,18 +73,7 @@ import { useSettingStore } from '@/store'
 const router = useRouter()
 
 const settingStore = useSettingStore()
-const { modelName } = storeToRefs(settingStore)
-
-const modelList = [
-  {
-    value: 'gpt-3.5-turbo',
-    label: 'gpt-3.5-turbo'
-  },
-  {
-    value: 'gpt-4',
-    label: 'gpt-4'
-  }
-]
+const { modelName, modelList } = storeToRefs(settingStore)
 
 const handleConfirmClear = () => {
   window.localStorage.clear()

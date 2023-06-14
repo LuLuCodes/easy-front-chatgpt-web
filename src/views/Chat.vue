@@ -78,6 +78,36 @@
             :readonly="promptSending"
             @keyup.enter="handlerSubmit"
           />
+          <el-popover :visible="chatPopupVisible" trigger="click" placement="top" :width="540">
+            <div class="pl10 pr10">
+              <h3 class="f14"><b>设置</b></h3>
+              <h4 class="f14 mt20 mb10">语言模型</h4>
+              <div>
+                <el-select placeholder="" v-model="modelName">
+                  <el-option
+                    v-for="item in modelList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+              <div class="mt40 mb10">
+                <el-button
+                  type="primary"
+                  class="w100"
+                  @click.prevent.stop="chatPopupVisible = false"
+                  >确认</el-button
+                >
+              </div>
+            </div>
+            <template #reference>
+              <span
+                @click="chatPopupVisible = true"
+                class="icon icon-shezhi f18 ml10 mr10 pointer"
+              ></span>
+            </template>
+          </el-popover>
           <el-tooltip class="box-item" effect="dark" content="重新生成" placement="top">
             <span class="icon icon-shuaxin f18 ml10 mr10 pointer"></span>
           </el-tooltip>
@@ -125,6 +155,7 @@ const inputPromptRef = ref(null)
 const promptSending = ref(false)
 
 const messageScrollbarRef = ref(null)
+const chatPopupVisible = ref(false)
 
 const conversationStore = useGeneralConversationStore()
 const { createConversation, setCurConversationById, delConversationById, updateConversation } =
@@ -136,7 +167,7 @@ const { addMessage, updateMessage, delMessageByConversationId } = messageStore
 const { messageList } = storeToRefs(messageStore)
 
 const settingStore = useSettingStore()
-const { modelName } = storeToRefs(settingStore)
+const { modelName, modelList } = storeToRefs(settingStore)
 
 const conversationMessageList = computed(() => {
   return messageList.value.filter((message) => message.conversationId === curConversationId.value)
