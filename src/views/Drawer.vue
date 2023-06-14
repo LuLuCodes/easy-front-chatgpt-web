@@ -77,12 +77,12 @@
             ref="inputPromptRef"
             class="flex-1"
             type="textarea"
-            placeholder="请输入你的问题..."
+            placeholder="请输入对图片的描述（如需对现有图像改写,请在描述前加入图片url地址并以空格分隔，例如 `http//www.xxx.png 你的描述`）..."
             clearable
             :readonly="promptSending"
             @keyup.enter="handlerSubmit"
           />
-          <el-popover :visible="drawerPopupVisible" trigger="click" placement="top" :width="520">
+          <el-popover :visible="drawerPopupVisible" trigger="click" placement="top" :width="540">
             <div class="pl10 pr10">
               <h3 class="f14"><b>设置</b></h3>
               <h4 class="f14 mt20 mb10">模型</h4>
@@ -113,7 +113,15 @@
                   <p class="f12 mt6">{{ option.label }}</p>
                 </el-check-tag>
               </div>
-              <h4 class="f14 mt30 mb10">离谱程度</h4>
+              <h4 class="f14 mt30 mb10">图片质量</h4>
+              <div class="pl10 pr10">
+                <el-radio-group v-model="drawerOptions.quality">
+                  <el-radio :label="0.25">低</el-radio>
+                  <el-radio :label="0.5">中</el-radio>
+                  <el-radio :label="1">高</el-radio>
+                </el-radio-group>
+              </div>
+              <h4 class="f14 mt30 mb10">离谱程度（较高值将产生更多不寻常和意想不到的结果）</h4>
               <div class="pl10 pr10">
                 <el-slider
                   v-model="drawerOptions.chaos"
@@ -124,15 +132,28 @@
                   :marks="chaosMarks"
                 />
               </div>
-              <h4 class="f14 mt30 mb10">艺术性</h4>
+              <h4 class="f14 mt30 mb10">
+                艺术性（较高值创建的图像非常具有艺术性，但与提示的联系较少）
+              </h4>
               <div class="pl10 pr10">
                 <el-slider
                   v-model="drawerOptions.stylize"
                   :min="0"
                   :max="1000"
-                  :step="10"
+                  :step="100"
                   show-stops
                   :marks="stylizeMarks"
+                />
+              </div>
+              <h4 class="f14 mt30 mb10">图片权重（以图生图中，权重越大，越接近原图）</h4>
+              <div class="pl10 pr10">
+                <el-slider
+                  v-model="drawerOptions.iw"
+                  :min="0.5"
+                  :max="2"
+                  :step="0.25"
+                  show-stops
+                  :marks="iwMarks"
                 />
               </div>
               <div class="mt40 mb10">
@@ -207,6 +228,16 @@ const stylizeMarks = reactive({
   1000: '1000'
 })
 
+const iwMarks = reactive({
+  0.5: '0.5',
+  0.75: '0.75',
+  1: '1',
+  1.25: '1.25',
+  1.5: '1.5',
+  1.75: '1.75',
+  2: '2'
+})
+
 const aspectOptions = [
   { label: '默认', value: '1:1' },
   { label: '电脑壁纸', value: '16:9' },
@@ -220,7 +251,8 @@ const drawerOptions = reactive({
   chaos: 0,
   stylize: 100,
   quality: 1,
-  niji: 0
+  niji: 0,
+  iw: 1
 })
 
 const inputPrompt = ref('')
