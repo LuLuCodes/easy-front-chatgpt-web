@@ -115,7 +115,7 @@ import LeftSideNav from '@/components/LeftSideNav.vue'
 import Message from '@/components/Message.vue'
 import SettingButton from '@/components/SettingButton.vue'
 import { storeToRefs } from 'pinia'
-import { useGeneralConversationStore, useGeneralMessageStore } from '@/store'
+import { useGeneralConversationStore, useGeneralMessageStore, useSettingStore } from '@/store'
 import { useCopyCode } from '@/hooks/useCopyCode'
 
 const MAX_TOKENS = 4000
@@ -134,6 +134,9 @@ const { conversationList, curConversationId, curConversation } = storeToRefs(con
 const messageStore = useGeneralMessageStore()
 const { addMessage, updateMessage, delMessageByConversationId } = messageStore
 const { messageList } = storeToRefs(messageStore)
+
+const settingStore = useSettingStore()
+const { modelName } = storeToRefs(settingStore)
 
 const conversationMessageList = computed(() => {
   return messageList.value.filter((message) => message.conversationId === curConversationId.value)
@@ -232,7 +235,10 @@ const handlerSubmit = async () => {
   })
 
   try {
-    const responseData = await sendMessagesToOpenAi(formatedMessageList)
+    const responseData = await sendMessagesToOpenAi({
+      modelName: modelName.value,
+      messages: formatedMessageList
+    })
 
     const reader = responseData.getReader()
     const decoder = new TextDecoder('utf-8')

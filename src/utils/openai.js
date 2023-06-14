@@ -46,12 +46,13 @@ export const sqlBot = {
   }
 }
 
-export const sendMessagesToAzureAi = async (messages) => {
+export const sendMessagesToAzureAi = async ({ modelName, messages }) => {
   const rawRes = await fetch(
     `${import.meta.env.VITE_APP_BASE_API}/api/azure-gpt/chat-message-by-stream`,
     {
       method: 'POST',
       body: JSON.stringify({
+        model: modelName,
         messages
       }),
       headers: {
@@ -69,12 +70,13 @@ export const sendMessagesToAzureAi = async (messages) => {
   return data
 }
 
-export const sendMessagesToOpenAi = async (messages) => {
+export const sendMessagesToOpenAi = async ({ modelName, messages }) => {
   const rawRes = await fetch(
     `${import.meta.env.VITE_APP_BASE_API}/api/chat-gpt/chat-message-by-stream`,
     {
       method: 'POST',
       body: JSON.stringify({
+        model: modelName,
         messages
       }),
       headers: {

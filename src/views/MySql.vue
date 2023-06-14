@@ -400,7 +400,7 @@ const handlerSubmit = async () => {
   })
 
   try {
-    const responseData = await sendMessagesToAzureAi(formatedMessageList)
+    const responseData = await sendMessagesToAzureAi({ messages: formatedMessageList })
 
     const reader = responseData.getReader()
     const decoder = new TextDecoder('utf-8')
