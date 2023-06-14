@@ -335,6 +335,7 @@ const handlerActionImage = async ({ imageId, action }) => {
 
       if (value) {
         const data = decoder.decode(value)
+        console.log(data)
         const lines = data
           .toString()
           .split('\n')
@@ -360,8 +361,7 @@ const handlerActionImage = async ({ imageId, action }) => {
     }
     updateMessage(assistantMessage.id, {
       status: 'DONE',
-      content: `${imageId} ${action}`,
-      imageData: responseData
+      content: `${imageId} ${action}`
     })
   } catch (error) {
     updateMessage(assistantMessage.id, {
@@ -440,9 +440,9 @@ const handlerSubmit = async () => {
     let done = false
     while (!done) {
       const { value, done: readerDone } = await reader.read()
-      console.log(value)
       if (value) {
         const data = decoder.decode(value)
+        console.log(data)
         const lines = data
           .toString()
           .split('\n')
