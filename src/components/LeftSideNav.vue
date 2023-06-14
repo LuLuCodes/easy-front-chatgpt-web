@@ -4,17 +4,22 @@
     <div class="side-nav pt20">
       <el-scrollbar>
         <ul>
-          <li @click="navigateTo('/chat')" :class="{ on: currentPath === '/chat' }">
-            <span class="icon icon-ie-ChatGPT"></span>
-          </li>
-          <li @click="navigateTo('/mysql')" :class="{ on: currentPath === '/mysql' }">
-            <span class="icon icon-mysql"></span>
-          </li>
+          <el-tooltip effect="dark" content="AI聊天" placement="left"
+            ><li @click="navigateTo('/chat')" :class="{ on: currentPath === '/chat' }">
+              <span class="icon icon-ie-ChatGPT"></span></li
+          ></el-tooltip>
+          <el-tooltip effect="dark" content="AI数据库" placement="left"
+            ><li @click="navigateTo('/mysql')" :class="{ on: currentPath === '/mysql' }">
+              <span class="icon icon-mysql"></span></li
+          ></el-tooltip>
+
           <!-- <li><span class="icon icon-SQLServer f22"></span></li>
           <li><span class="icon icon-postgresql f22"></span></li> -->
-          <li @click="navigateTo('/drawer')" :class="{ on: currentPath === '/drawer' }">
-            <span class="icon icon-image1 f18"></span>
-          </li>
+
+          <el-tooltip effect="dark" content="AI作图" placement="left"
+            ><li @click="navigateTo('/drawer')" :class="{ on: currentPath === '/drawer' }">
+              <span class="icon icon-image1 f18"></span></li
+          ></el-tooltip>
         </ul>
       </el-scrollbar>
     </div>
