@@ -8,14 +8,14 @@ export const useSettingStore = defineStore(
     const chatModelName = ref('gpt-3.5-turbo')
     const sqlModelName = ref('gpt-3.5-turbo')
     const modelList = reactive([
-      ({
+      {
         value: 'gpt-3.5-turbo',
         label: 'gpt-3.5-turbo'
       },
       {
         value: 'gpt-4',
         label: 'gpt-4'
-      })
+      }
     ])
     return { modelName, chatModelName, sqlModelName, modelList }
   },
