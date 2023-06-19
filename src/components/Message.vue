@@ -302,4 +302,9 @@ mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor
 .chat-left:hover .el-dropdown {
   visibility: visible;
 }
+
+.code-block-wrapper {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 </style>
