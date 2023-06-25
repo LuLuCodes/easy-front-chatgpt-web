@@ -230,7 +230,7 @@ const handlerActionImage = (action) => {
 }
 
 function highlightBlock(str, lang = '') {
-  return `<pre id="${props.message.id}" assistant-id= "${
+  return `<pre id="msg-${props.message.id}" assistant-id= "${
     props.conversation.assistantId
   }" class="code-block-wrapper"><div class="code-box-top flex all-c pl16 pr16"><span class="flex-1">${lang}</span><span class="icon icon-copy pointer"></span>${
     props.conversation.assistantId === SQLChatBotId

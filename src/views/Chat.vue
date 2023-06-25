@@ -173,8 +173,8 @@ const conversationMessageList = computed(() => {
   return messageList.value.filter((message) => message.conversationId === curConversationId.value)
 })
 
-useCopyCode()
 onMounted(() => {
+  useCopyCode()
   scrollToMessageListBottom()
 })
 
@@ -321,6 +321,8 @@ const handlerSubmit = async () => {
     updateMessage(assistantMessage.id, {
       status: 'DONE'
     })
+
+    useCopyCode(assistantMessage.id)
   } catch (error) {
     updateMessage(assistantMessage.id, {
       content: error.message,

@@ -253,9 +253,9 @@ const handlerExecSql = async ({ sql }) => {
   showExecSqlDrawer.value = true
 }
 
-useCopyCode()
-useExecCode(handlerExecSql)
 onMounted(() => {
+  useCopyCode()
+  useExecCode({ fn: handlerExecSql })
   scrollToMessageListBottom()
 })
 
@@ -491,6 +491,9 @@ const handlerSubmit = async () => {
     updateMessage(assistantMessage.id, {
       status: 'DONE'
     })
+    useCopyCode(assistantMessage.id)
+
+    useExecCode({ messageId: assistantMessage.id, fn: handlerExecSql })
   } catch (error) {
     updateMessage(assistantMessage.id, {
       content: error.message,
