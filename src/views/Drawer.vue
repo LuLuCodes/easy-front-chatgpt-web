@@ -175,10 +175,10 @@
           <el-tooltip class="box-item" effect="dark" content="重新生成" placement="top">
             <span class="icon icon-shuaxin f18 ml10 mr10 pointer"></span>
           </el-tooltip>
-          <el-tooltip class="box-item" effect="dark" content="清除输入" placement="top">
+          <el-tooltip class="box-item" effect="dark" content="清除会话记录" placement="top">
             <span
               class="icon icon-qingchu f18 ml10 mr10 pointer"
-              @click.prevent.stop="inputPrompt = ''"
+              @click.prevent.stop="handlerClearMessages"
             ></span>
           </el-tooltip>
           <span
@@ -298,6 +298,12 @@ const handlerCreateConversation = () => {
 const handlerDelConversation = (conversationId) => {
   delConversationById(conversationId)
   delMessageByConversationId(conversationId)
+}
+
+const handlerClearMessages = () => {
+  if (curConversationId.value) {
+    delMessageByConversationId(curConversationId.value)
+  }
 }
 
 const handlerActionImage = async ({ imageId, action }) => {
